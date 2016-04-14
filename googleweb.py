@@ -12,8 +12,9 @@ import os
 import sys
 loger = logging.getLogger('googleweb')
 loger.setLevel(logging.INFO)
-fh = logging.handlers.RotatingFileHandler(os.path.join(sys.path[0], 'connect.log'),maxBytes=5242880, backupCount=5)
-#fh.suffix = '%Y-%m-%d'
+fh=logging.handlers.TimedRotatingFileHandler(os.path.join(sys.path[0], 'connect.log'),'midnight',1,30);
+#fh = logging.handlers.RotatingFileHandler(os.path.join(sys.path[0], 'connect.log'),maxBytes=5242880, backupCount=5)
+fh.suffix = '%Y-%m-%d'
 formatter = logging.Formatter('%(asctime)s  %(message)s', '%Y-%m-%d %H:%M:%S')
 fh.setFormatter(formatter)
 loger.addHandler(fh)
@@ -31,8 +32,8 @@ class GoogleHandler(Handler):
 httpd=Server(('',80),GoogleHandler)
 try:
     httpd.serve_forever()
-except KeyboardInterrupt:
-    pass
+except Exception as ex:
+    loger.info(ex)
 httpd.server_close()
 
 
